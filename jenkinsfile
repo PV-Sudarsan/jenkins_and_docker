@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo "Build Started"
+                git url'https://github.com/PV-Sudarsan/jenkins_and_docker.git'
+                script {
+                    dir('jenkins_and_docker/springapp') {
+                        docker.build('springapp:latest', '.')
+                    }
+                    dir('jenkins_and_docker/frontend') {
+                        docker.build('frontend:latest', '.')
+                    }
+                }
+            }
+        }
+        stage('Run') {
+            steps {
+                echo "Run Started"
+                sh 'docker run -d -p 8082:8082 --name springapp springapp:latest'
+                sh 'docker run -d -p 5173:5173 --name frontend frontend:latest'
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline finished"
+        }
+    }
+}
