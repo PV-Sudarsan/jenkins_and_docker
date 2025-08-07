@@ -3,9 +3,10 @@ pipeline {
     stages {
         stage('Build SpringApp') {
             steps {
+
                 echo "Building SpringApp Docker image"
                 dir('jenkins_and_docker/springapp') {
-                    sh 'docker build -t springapp:latest .'
+                    sh 'docker build -t springapp:latest "."'
                 }
             }
         }
@@ -13,7 +14,7 @@ pipeline {
             steps {
                 echo "Building Frontend Docker image"
                 dir('jenkins_and_docker/frontend') {
-                    sh 'docker build -t frontend:latest .'
+                    sh 'docker build -t frontend:latest "."'
                 }
             }
         }
